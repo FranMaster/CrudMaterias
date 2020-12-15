@@ -45,6 +45,33 @@ INSERT INTO `alumno` VALUES ('Prueba1','Prueba1','2020-12-13 00:00:00',5153115,1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `alumnomateria`
+--
+
+DROP TABLE IF EXISTS `alumnomateria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `alumnomateria` (
+  `Alegajo` int NOT NULL,
+  `IdMateria` int NOT NULL,
+  PRIMARY KEY (`Alegajo`,`IdMateria`),
+  KEY `IdMateria_idx` (`IdMateria`),
+  KEY `Plegajo_idx` (`Alegajo`),
+  CONSTRAINT `IdMateria` FOREIGN KEY (`IdMateria`) REFERENCES `materias` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alumnomateria`
+--
+
+LOCK TABLES `alumnomateria` WRITE;
+/*!40000 ALTER TABLE `alumnomateria` DISABLE KEYS */;
+INSERT INTO `alumnomateria` VALUES (1,6);
+/*!40000 ALTER TABLE `alumnomateria` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `materias`
 --
 
@@ -57,7 +84,7 @@ CREATE TABLE `materias` (
   `AnioCurso` int NOT NULL,
   `Activa` tinyint(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +93,7 @@ CREATE TABLE `materias` (
 
 LOCK TABLES `materias` WRITE;
 /*!40000 ALTER TABLE `materias` DISABLE KEYS */;
-INSERT INTO `materias` VALUES (1,'Fisica',200,0),(2,'matematica',2020,0);
+INSERT INTO `materias` VALUES (1,'Fisica',200,0),(2,'matematica',2020,0),(3,'Castellano',2020,1),(4,'Ingles',2020,1),(5,'Trigonometria Avanzada',2020,1),(6,'Artes',2020,1),(7,'EdFisica',2020,1);
 /*!40000 ALTER TABLE `materias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,8 +122,32 @@ CREATE TABLE `profesor` (
 
 LOCK TABLES `profesor` WRITE;
 /*!40000 ALTER TABLE `profesor` DISABLE KEYS */;
-INSERT INTO `profesor` VALUES ('Francisco ','Jimenez','2020-12-13 00:00:00',1501,1,'2020-12-13 00:00:00',1),('Adrian','Jimenez','1990-01-30 00:00:00',1501,2,'2019-01-15 00:00:00',0);
+INSERT INTO `profesor` VALUES ('Francisco ','Jimenez','2020-12-13 00:00:00',1501,1,'2020-12-13 00:00:00',0),('Adrian','Jimenez','1990-01-30 00:00:00',1501,2,'2019-01-15 00:00:00',1);
 /*!40000 ALTER TABLE `profesor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `profesormateria`
+--
+
+DROP TABLE IF EXISTS `profesormateria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `profesormateria` (
+  `Plegajo` int NOT NULL,
+  `IdMateria` int NOT NULL,
+  PRIMARY KEY (`Plegajo`,`IdMateria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `profesormateria`
+--
+
+LOCK TABLES `profesormateria` WRITE;
+/*!40000 ALTER TABLE `profesormateria` DISABLE KEYS */;
+INSERT INTO `profesormateria` VALUES (1,3),(1,5),(1,6),(1,7),(2,5),(2,6),(3,4),(3,5),(3,7);
+/*!40000 ALTER TABLE `profesormateria` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -112,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-13 22:53:42
+-- Dump completed on 2020-12-15  1:58:55
