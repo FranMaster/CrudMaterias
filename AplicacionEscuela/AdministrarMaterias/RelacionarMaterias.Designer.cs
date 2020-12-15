@@ -45,6 +45,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(996, 455);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.CargarDatosSeleccionados);
             // 
             // button1
             // 
@@ -93,6 +94,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "Quitar Relacion";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // RelacionarMaterias
             // 

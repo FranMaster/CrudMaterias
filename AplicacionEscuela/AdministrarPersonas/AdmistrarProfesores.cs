@@ -28,14 +28,14 @@ namespace AplicacionEscuela
             {
                 if (this.dataGridView1.SelectedRows.Count > 0)
                 {
-                    string Legajo = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                    this.dateTimePicker2.Value = (DateTime)dataGridView1.SelectedRows[0].Cells[1].Value;
-                    this.checkBox1.Checked = (bool)dataGridView1.SelectedRows[0].Cells[2].Value;
+                    string Legajo = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
+                    this.checkBox1.Checked = (bool)dataGridView1.SelectedRows[0].Cells[1].Value;
                     this.textBox1.Text = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
                     this.textBox2.Text = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
                     this.dateTimePicker1.Value = (DateTime)dataGridView1.SelectedRows[0].Cells[6].Value;
                     this.textBox3.Text = ((int)dataGridView1.SelectedRows[0].Cells[7].Value).ToString();
                     this.textBox6.Text = Legajo;
+                    this.dateTimePicker2.Value= (DateTime)dataGridView1.SelectedRows[0].Cells[0].Value;
                     ProfesorSeleccionado = new Profesor();
                     ProfesorSeleccionado.Nombre = textBox1.Text;
                     ProfesorSeleccionado.Apellido = textBox2.Text;
@@ -66,7 +66,7 @@ namespace AplicacionEscuela
             if (ProfesorSeleccionado!=null && ProfesorSeleccionado.Activo)
             {
 
-                RelacionarMaterias materias = new RelacionarMaterias(this.ProfesorSeleccionado);
+                RelacionarMaterias materias = new RelacionarMaterias(this.ProfesorSeleccionado.NumeroLegajo,TipoPersona.Profesor);
                 materias.ShowDialog();
             }
             else

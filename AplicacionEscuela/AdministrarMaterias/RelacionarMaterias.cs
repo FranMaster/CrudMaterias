@@ -14,73 +14,119 @@ namespace AplicacionEscuela.AdministrarMaterias
 {
     public partial class RelacionarMaterias : Form
     {
-        public Profesor ProfesorSeleccionado { get; set; }
-        public RelacionarMaterias(object Filtro)
+        public int legajoPasado { get; set; }
+        public TipoPersona tipoPasado { get; set; }
+        public Materias MateriasSeleccionada { get; set; }
+        public RelacionarMaterias(int Filtro,TipoPersona tipo)
         {
             InitializeComponent();
-            ProfesorSeleccionado=(Profesor)Filtro;
-            ListarRelaciones();
+            LlenarComboMaterias();
+            legajoPasado = Filtro;
+            tipoPasado = tipo;
+            ListarDatos(Filtro, tipo);
 
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                List<Materias> lista = (List<Materias>)new LogicaMaterias().Listar();
-                int? IndiceEsperado = null;
-                for (int i = 0; i <= lista.Count - 1; i++)
-                {
-                    if (lista[i].Descripcion == ((Materias)comboBox1.SelectedItem).Descripcion)
-                    {
-                        IndiceEsperado = i;
-                        lista[i].DictadaPor = new List<Profesor>();
-                    }
-                }
-                if (IndiceEsperado != null)
-                {
-                    lista[IndiceEsperado.Value].DictadaPor.Add(ProfesorSeleccionado);
-                    new LogicaMaterias().Actualizar(IndiceEsperado.Value, lista[IndiceEsperado.Value]);
-                    ListarRelaciones();
-                }
-            }
-            catch (Exception r)
+            bool respuesta;
+            if (((Materias)comboBox1.SelectedItem).Activa)
             {
 
-                MessageBox.Show(r.Message);
+                int IdMateriaSeleccionada = ((Materias)comboBox1.SelectedItem).Id;
+               
+                switch (tipoPasado)
+                {
+                    case TipoPersona.Alumno:
+                        respuesta = new LogicaMaterias().InsertarRelacionAlumno(IdMateriaSeleccionada, legajoPasado);
+                        break;
+                    case TipoPersona.Profesor:
+                        respuesta = new LogicaMaterias().InsertarRelacionProfesor(IdMateriaSeleccionada, legajoPasado);
+                        break;
+                    default:
+                        return;
+                    
+                }
+                
+                if (!respuesta)
+                {
+                    MessageBox.Show("No se Agrego Relacion");
+                }
+                ListarDatos(legajoPasado, tipoPasado);
             }
-            
+            else
+            {
+                MessageBox.Show("Solo se pueden Relacionar Materias Activas");
+            }
+           
+        }
+
+        public void ListarDatos(int Filtro, TipoPersona tipo)
+        {
+            List<Materias> lista = new List<Materias>();
+            switch (tipo)
+            {
+                case TipoPersona.Alumno:
+                    lista = (List<Materias>)new LogicaMaterias()
+                     .ListarRelacionAlumno(Filtro);
+                    break;
+                case TipoPersona.Profesor:
+                    lista=(List<Materias>)new LogicaMaterias()
+                        .ListarRelacionProfesor(Filtro);
+                    break;
+                default:
+                    break;
+            }
+            this.dataGridView1.DataSource = null;
+            this.dataGridView1.DataSource = lista;
 
         }
-        public void ListarRelaciones()
-        {
-            List<Materias> lista = (List<Materias>)new LogicaMaterias().Listar();
-            List<Materias> listaMateriasRelacionadas = new List<Materias>();
-            this.comboBox1.DataSource = lista;
-            this.comboBox1.DisplayMember = "Descripcion";
-            foreach (var Materia in lista)
-            {
-                if (Materia.DictadaPor != null && Materia.DictadaPor.Count > 0)
-                {
-                    for (int i = 0; i <= Materia.DictadaPor.Count - 1; i++)
-                    {
-                        if (Materia.DictadaPor[i].Dni == ProfesorSeleccionado.Dni)
-                        {
-                            listaMateriasRelacionadas.Add(Materia);
-                        }
-                    }
-                }
-                else
-                {
-                    continue;
-                }
 
+        public void LlenarComboMaterias()
+        {
+            List<Materias> Materia = (List<Materias>)new Capa_Logica.LogicaMaterias().Listar();
+            this.comboBox1.DataSource = Materia;
+            this.comboBox1.DisplayMember = "Descripcion";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            bool respuesta;
+            switch (this.tipoPasado)
+            {
+                case TipoPersona.Alumno:
+                    respuesta = new LogicaMaterias()
+                     .EliminarRelacionAlumnoDatos(MateriasSeleccionada.Id,legajoPasado);
+                    break;
+                case TipoPersona.Profesor:
+                    respuesta = new LogicaMaterias()
+                        .EliminarRelacionProfesorDatos(MateriasSeleccionada.Id, legajoPasado);
+                    break;
+                default:
+                    break;
+            }
+            ListarDatos(legajoPasado, tipoPasado);
+        }
+
+   
+
+        private void CargarDatosSeleccionados(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.dataGridView1.SelectedRows.Count > 0)
+                {
+                    MateriasSeleccionada = new Materias();
+                    MateriasSeleccionada.Id = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+                    MateriasSeleccionada.Descripcion = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
 
             }
-
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = listaMateriasRelacionadas;
         }
     }
 }

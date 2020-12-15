@@ -74,7 +74,7 @@ namespace AplicacionEscuela
             if (AlumnoSeleccionado != null )
             {
 
-                RelacionarMaterias materias = new RelacionarMaterias(this.AlumnoSeleccionado);
+                RelacionarMaterias materias = new RelacionarMaterias(this.AlumnoSeleccionado.NumeroLegajo,TipoPersona.Alumno);
                 materias.ShowDialog();
             }
             else
